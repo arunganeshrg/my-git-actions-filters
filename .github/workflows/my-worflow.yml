@@ -21,6 +21,6 @@ jobs:
             - name: "Run the tests"
               run: npm test
             - name: "Deploy the code"
-              run: echo "Deploying the code ${{toJson(github)}}"
+              run: echo "Deploying the code ${{toJson(github.event)}}"
 
 
