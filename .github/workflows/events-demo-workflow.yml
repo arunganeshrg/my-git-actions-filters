@@ -1,4 +1,4 @@
-name: Events Demo Workflow
+name: events-demo-workflow
 on:
   pull_request:
     types: [closed]
