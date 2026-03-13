@@ -1,0 +1,33 @@
+name: code-deploy
+on: 
+    push:
+        branches:
+            - main
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+        - name: "Cloning the code"
+          uses: actions/checkout@v6
+        - name: "Install the dependencies"
+          run: npm ci
+        - name: "Lint Code"
+          run: npm run lint
+        - name: "Run Tests"
+          run: npm test
+    build:
+        needs: test
+        runs-on: ubuntu-latest
+        steps:
+        - name: "Cloning the code"
+          uses: actions/checkout@v6
+        - name: "Install the dependencies"
+          run: npm ci
+        - name: "Building the code"
+          run: npm run build
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+        - name: "Deploy the code"
+          run : echo "Deploying"
