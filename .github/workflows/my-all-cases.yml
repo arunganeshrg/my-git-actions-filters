@@ -51,6 +51,6 @@ jobs:
         run: echo "Deploying the code ${{ github.event }}"
 
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist-files
