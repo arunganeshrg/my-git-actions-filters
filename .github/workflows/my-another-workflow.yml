@@ -1,0 +1,54 @@
+name: my-simple-workflow
+on: 
+    push:
+        branches:
+            - main
+            - dev-*
+    pull_request:
+        types: [opened, closed]
+        branches:
+            - main
+            - dev-*
+    workflow_dispatch:
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checking out the code
+              uses: actions/checkout@v4
+            - name: Installing Dependencies
+              run: npm ci
+            - name: Running lint code
+              run: npm run lint
+            - name: Running the tests
+              run: npm run test
+    build:
+        runs-on: ubuntu-latest
+        needs: test
+        steps:
+            - name: Checking out the code
+              uses: actions/checkout@v4
+            - name: Installing Dependencies
+              run: npm ci
+            - name: Building the code
+              run: npm run build
+            - name: Uploading the artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: dist-files
+                path: dist
+                
+    deploy:
+        runs-on: ubuntu-latest
+        needs: build
+        steps:
+            - name: Downloading the artifacts
+              uses: actions/download-artifact@v3
+              with:
+                path: dist-files
+            - name: Listing all the files
+              run: ls
+            - name: Deploying the code
+              run: echo ${{github.event}}
+
+     
