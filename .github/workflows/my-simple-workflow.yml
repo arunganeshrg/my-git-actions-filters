@@ -57,9 +57,7 @@ jobs:
         with:
           name: dist-files
           path: dist
-      - name: Listing the files
+      - name: Listing the files under dist folder
         run: ls dist
-      - name: Listing all the files
-        run: ls
       - name: Deploying the code
         run: echo ${{github.event}}
