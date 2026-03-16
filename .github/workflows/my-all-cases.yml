@@ -18,6 +18,12 @@ jobs:
       - name: Pull the code
         uses: actions/checkout@v4
 
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        with: 
+            path: ~/.npm
+            key: dep-files-${{hashFiles('package-lock.json')}}
+
       - name: Install Dependencies
         run: npm ci
 
@@ -28,10 +34,17 @@ jobs:
         run: npm test
 
   build:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Pull the code
         uses: actions/checkout@v4
+
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        with: 
+            path: ~/.npm
+            key: dep-files-${{hashFiles('package-lock.json')}}
 
       - name: Install Dependencies
         run: npm ci
@@ -44,14 +57,16 @@ jobs:
         with:
           name: dist-files
           path: dist
+      - run: ls -R
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy the code
-        run: echo "Deploying the code ${{ github.event }}"
-
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           name: dist-files
+          path: dist
+      - name: Deploy the code
+        run: echo "Deploying the code ${{ github.event }}"
