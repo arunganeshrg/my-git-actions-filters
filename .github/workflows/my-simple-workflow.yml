@@ -16,6 +16,11 @@ jobs:
     steps:
       - name: Checking out the code
         uses: actions/checkout@v4
+      - name: Caching Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{runner.os}}-npm-dep-${{hashFiles('package-lock.json')}}
       - name: Installing Dependencies
         run: npm ci
       - name: Running lint code
@@ -28,6 +33,11 @@ jobs:
     steps:
       - name: Checking out the code
         uses: actions/checkout@v4
+      - name: Caching Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{runner.os}}-npm-dep-${{hashFiles('package-lock.json')}}
       - name: Installing Dependencies
         run: npm ci
       - name: Building the code
